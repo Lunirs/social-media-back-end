@@ -111,7 +111,32 @@ const thoughtController = {
     }
   },
   // CREATE a reaction to a thought by its id
+  async addReaction(req, res) {
+    try {
+      const thoughtReactionData = await Thought.findOneAndUpdate(
+        {
+          _id: req.params.thoughtId,
+        },
+        { $addToSet: { reactions: req.body } },
+        { runValidators: true, new: true }
+      );
+
+      if (!thoughtReactionData) {
+        return res
+          .status(404)
+          .json({ message: "A thought with this user does not exist." });
+      }
+
+      res.status(200).json(thoughtReactionData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
   // DELETE a reaction from a thought by its id
+
+  async deleteReaction(req, res) {},
 };
 
 module.exports = thoughtController;
