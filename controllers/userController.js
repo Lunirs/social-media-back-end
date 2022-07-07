@@ -83,6 +83,25 @@ const userController = {
     }
   },
   // CREATE a new friend to user's friend list
+
+  async addFriend(req, res) {
+    try {
+      const userFriendData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.body } },
+        { runValidators: true, new: true }
+      );
+
+      if (!userFriendData) {
+        return res.status(404).json({ message: "This user does not exist." });
+      }
+
+      res.status(200).json(userFriendData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // DELETE a friend from a user's friend list
 };
 
