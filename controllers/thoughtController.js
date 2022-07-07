@@ -136,7 +136,27 @@ const thoughtController = {
 
   // DELETE a reaction from a thought by its id
 
-  async deleteReaction(req, res) {},
+  async deleteReaction(req, res) {
+    try {
+      const thoughtReactionData = await Thought.findOneAndUpdate(
+        {
+          _id: req.params.thoughtId,
+        },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
+      );
+
+      if (!thoughtReactionData) {
+        return res
+          .status(404)
+          .json({ message: "This thought does not exist." });
+      }
+      res.status(200).json(thoughtReactionData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
 };
 
 module.exports = thoughtController;
