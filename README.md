@@ -9,7 +9,7 @@ This project uses mongoDB and the npm packages mongoose/express to run and keep 
 
 If a user is to be deleted, all of the thoughts they have posted get deleted along with it!
 
-To see the api in action, please check out my video guide [here]().
+To see the api in action, please check out my video guide [here](https://www.youtube.com/watch?v=1kPspBjBlqI).
 
 ## Table of Contents
 
@@ -64,7 +64,7 @@ You will have to use specific end points to target each and every one of them.
 /api/thoughts/:thoughtId/reactions/:reactionId end point is used to DELETE a specific reaction from a specific thought.
 ```
 
-### [Click here]() to see the video.
+### [Click here](https://www.youtube.com/watch?v=1kPspBjBlqI) to see the video.
 
 ## Questions
 
