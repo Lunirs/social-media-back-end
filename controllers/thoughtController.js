@@ -78,6 +78,38 @@ const thoughtController = {
     }
   },
   // DELETE a thought by its id
+  async deleteThought(req, res) {
+    try {
+      const thoughtData = await Thought.findOneAndDelete({
+        _id: req.params.thoughtId,
+      });
+
+      if (!thoughtData) {
+        return res
+          .status(404)
+          .json({ message: "This thought does not exist." });
+      }
+
+      const userData = await User.findOneAndUpdate(
+        {
+          thoughts: req.params.thoughtId,
+        },
+        { $pull: { thoughts: req.params.thoughtId } },
+        { new: true }
+      );
+
+      if (!userData) {
+        return res.status(404).json({
+          message:
+            "Thought was successfully deleted. However the associated user could not be found.",
+        });
+      }
+      res.status(200).json({ message: "Thought successfully deleted." });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // CREATE a reaction to a thought by its id
   // DELETE a reaction from a thought by its id
 };
