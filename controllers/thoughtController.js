@@ -32,6 +32,28 @@ const thoughtController = {
     }
   },
   // CREATE a thought
+  async createThought(req, res) {
+    try {
+      const thoughtData = await Thought.create(req.body);
+      const userData = await User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $push: { thoughts: thoughtData._id } },
+        { new: true }
+      );
+
+      if (!userData) {
+        return res.status(404).json({
+          message:
+            "This user does not exist. However, the thought was successfully created",
+        });
+      }
+
+      res.status(200).json({ message: "Thought was successfully created." });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // UPDATE a thought by its id
   // DELETE a thought by its id
   // CREATE a reaction to a thought by its id
