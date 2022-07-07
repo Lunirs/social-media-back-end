@@ -61,6 +61,27 @@ const userController = {
     }
   },
   // DELETE a user by its _id
+  async deleteUser(req, res) {
+    try {
+      const userData = await User.findOneAndDelete({ _id: req.params.userId });
+
+      if (!userData) {
+        return res.status(404).json({ message: "This user does not exist." });
+      }
+
+      // delete user's thoughts associated with their id
+
+      Thought.deleteMany({ _id: { $in: userData.thoughts } });
+
+      res.status(200).json({
+        message:
+          "User Deleted Successfully. Any associated thoughts have also been removed.",
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // CREATE a new friend to user's friend list
   // DELETE a friend from a user's friend list
 };
