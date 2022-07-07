@@ -71,7 +71,7 @@ const userController = {
 
       // delete user's thoughts associated with their id
 
-      Thought.deleteMany({ _id: { $in: userData.thoughts } });
+      await Thought.deleteMany({ _id: { $in: userData.thoughts } });
 
       res.status(200).json({
         message:
