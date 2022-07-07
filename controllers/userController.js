@@ -31,7 +31,35 @@ const userController = {
     }
   },
   // CREATE a new user
+  async newUser(req, res) {
+    try {
+      const userData = await User.create(req.body);
+
+      res.status(200).json(userData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // UDATE an existing user by its _id
+  async updateUser(req, res) {
+    try {
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
+
+      if (!userData) {
+        return res.status(404).json({ message: "This user does not exist." });
+      }
+
+      res.status(200).json(userData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // DELETE a user by its _id
   // CREATE a new friend to user's friend list
   // DELETE a friend from a user's friend list
