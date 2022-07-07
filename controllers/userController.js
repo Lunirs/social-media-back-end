@@ -103,6 +103,24 @@ const userController = {
     }
   },
   // DELETE a friend from a user's friend list
+  async deleteFriend(req, res) {
+    try {
+      const userFriendData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!userFriendData) {
+        return res.status(404).json({ message: "This user does not exist." });
+      }
+
+      res.status(200).json(userFriendData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
 };
 
 module.exports = userController;
