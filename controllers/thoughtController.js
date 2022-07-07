@@ -55,6 +55,28 @@ const thoughtController = {
     }
   },
   // UPDATE a thought by its id
+  async updateThought(req, res) {
+    try {
+      const thoughtData = await Thought.findOneAndUpdate(
+        {
+          _id: req.params.thoughtId,
+        },
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
+
+      if (!thoughtData) {
+        return res
+          .status(404)
+          .json({ message: "This thought does not exist." });
+      }
+
+      res.status(200).json(thoughtData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
   // DELETE a thought by its id
   // CREATE a reaction to a thought by its id
   // DELETE a reaction from a thought by its id
